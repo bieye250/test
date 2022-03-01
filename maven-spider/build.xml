@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="GBK" ?>
+<project name="test">
+    <java jar="./target/maven-spider-1.0-SNAPSHOT.jar" fork="yes">
+        <arg line="${hello}"></arg>
+    </java>
+</project>
