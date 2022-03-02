@@ -5,10 +5,11 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.spec.ECField;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PipelineAutoBuild {
+public class PipelineAutoBuild implements Runnable{
     static String LOGINURL = "http://192.168.11.237:9091/paas-web/upmsapi/system/login";
     static String COOKIEURL = "http://192.168.11.237:9091/paas-web/runtimeapi/clusterEnv/getClusterByEnvId";
     static String TASKURL = "http://192.168.11.237:9091/paas-web/pipelineapi/v1.8/flow/getFlows";
@@ -133,11 +134,19 @@ public class PipelineAutoBuild {
                 }
             });
             build.start();
-            long i = 0;
-            while (i < 5000) i++;
-            build.interrupt();
+            Thread.sleep(3000);
             System.out.println(user+"构建结束");
+            build.interrupt();
         } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    @Override
+    public void run() {
+        try{
+            wait(3000);
+        }catch (Exception e){
             System.out.println(e);
         }
     }

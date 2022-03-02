@@ -53,6 +53,7 @@ public class Spider {
                 pipelineAutoBuild.autoBuild(projectName);
             }
         }
+        Runtime.getRuntime().exit(0);
     }
 
     public static void login() throws IOException {
