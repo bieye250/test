@@ -116,7 +116,7 @@ public class Spider {
             dl.setMessageOutputLevel(Project.MSG_INFO);
             project.addBuildListener(dl);
             project.fireBuildStarted();
-            project.setProperty("pname", projectName);
+            project.setProperty("pn", projectName);
             project.setProperty("cr", taskNum);
             project.init();
 
