@@ -41,16 +41,20 @@ public class Spider {
         }
         String filename = "D:\\git-dev\\" + projectName + "\\updatelist.txt";
         File f = new File(filename);
-        if(!f.exists()) System.out.println("---文件不存在---");
-        else{
-            antExecute();
-            System.out.println("------输入\"y\"来确定是否继续构建流水线------");
-            String isContinue = sc.next();
-            if("y".equals(isContinue)){
-                PipelineAutoBuild pipelineAutoBuild = new PipelineAutoBuild();
-                pipelineAutoBuild.getToken();
-                pipelineAutoBuild.getCookie();
-                pipelineAutoBuild.autoBuild(projectName);
+        if (!f.exists()) System.out.println("---文件不存在---");
+        else {
+            System.out.println("------输入\"y\"来确定是否推送uat------");
+            String checkFile = sc.next();
+            if ("y".equals(checkFile)) {
+                antExecute();
+                System.out.println("------输入\"y\"来确定是否继续构建流水线------");
+                String isContinue = sc.next();
+                if ("y".equals(isContinue)) {
+                    PipelineAutoBuild pipelineAutoBuild = new PipelineAutoBuild();
+                    pipelineAutoBuild.getToken();
+                    pipelineAutoBuild.getCookie();
+                    pipelineAutoBuild.autoBuild(projectName);
+                }
             }
         }
         Runtime.getRuntime().exit(0);
@@ -92,13 +96,13 @@ public class Spider {
             String s = reader.readLine();
             if (s != null)
                 deque.offer(s);
-            while (!deque.isEmpty() || s.length() > 0) {
+            while (!deque.isEmpty() || s.length() >= 0) {
                 if (!deque.isEmpty())
                     writer.append(deque.poll());
                 s = reader.readLine();
                 if (s != null) {
                     if (s.length() > 0 && !s.matches("\t+")) {
-                        deque.offer(s);
+                         deque.offer(s);
                         writer.append("\r\n");
                     }
                 } else break;
