@@ -75,16 +75,23 @@ public class Spider {
         acconut.setValueAttribute("liushuai");
         password.setValueAttribute("liu342423");
         HtmlPage index = submit.click();
-        System.out.println(index.getBody());
 
         var taskuri = "http://192.168.11.166/zentao/task-view-" + taskNum;
         HtmlPage taskPage = webclient.getPage(taskuri);
         var docu = Jsoup.parse(taskPage.asXml());
         //Element link = docu.getElementById("mainContent").getElementsByTag("a").get(0);
-        Element link = docu.selectFirst("ul.files-list")
-                .select("a[target]")
-                .select("a:not([onclick*=废弃])").get(0);
-        System.out.println(link.attr("href"));
+//        Element link = docu.selectFirst("ul.files-list")
+//                .select("a[target]")
+//                .select("a:not([onclick*=废弃])").get(0);
+
+        Elements links = docu.selectFirst("ul.files-list").select("a[target]");
+        System.out.println("-----输出附件-----");
+        links.stream().forEach(i-> System.out.println(i.text()));
+
+        Element link = links.select("a:not([onclick*=废弃])").get(0);
+        System.out.println("-----选择的附件-----");
+        System.out.println(link.text());
+
         var fileLink = "http://192.168.11.166" + link.attr("href");
 
         URL url = new URL(fileLink);
