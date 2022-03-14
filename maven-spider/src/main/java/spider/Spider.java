@@ -22,23 +22,27 @@ public class Spider {
     static String taskNum;
     static String projectName;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 //        taskNum = args[0];
 //        projectName = args[1];
         Scanner sc = new Scanner(System.in);
         System.out.println("taskNum:");
         taskNum = sc.next();
-        System.out.println("ProjectName:");
+        Spider spider = new Spider();
+        Thread thread = new Thread(()->{
+            try {
+                spider.login();
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        });
+        thread.start();
+        Thread.sleep(2000);
+        System.out.println("-----输入peojectName-----");
         projectName = sc.next();
-//        System.out.printf("任务序号：%s\n",args[0]);
-//        System.out.printf("项目名：%s\n",args[1]);
-        System.out.println(taskNum);
-        System.out.println(projectName);
-        try {
-            login();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        sc.close();
+        Thread.sleep(3000);
+
         String filename = "D:\\git-dev\\" + projectName + "\\updatelist.txt";
         File f = new File(filename);
         if (!f.exists()) System.out.println("---文件不存在---");
@@ -60,7 +64,7 @@ public class Spider {
         Runtime.getRuntime().exit(0);
     }
 
-    public static void login() throws IOException {
+    public void login() throws IOException, InterruptedException {
         //var uri = "http://192.168.11.166/zentao/user-login.html";
         var webclient = new WebClient();
         webclient.getOptions().setCssEnabled(false);
@@ -79,10 +83,11 @@ public class Spider {
         var taskuri = "http://192.168.11.166/zentao/task-view-" + taskNum;
         HtmlPage taskPage = webclient.getPage(taskuri);
         var docu = Jsoup.parse(taskPage.asXml());
-        //Element link = docu.getElementById("mainContent").getElementsByTag("a").get(0);
 //        Element link = docu.selectFirst("ul.files-list")
 //                .select("a[target]")
 //                .select("a:not([onclick*=废弃])").get(0);
+
+        System.out.println(docu.selectFirst("span.text").text());
 
         Elements links = docu.selectFirst("ul.files-list").select("a[target]");
         System.out.println("-----输出附件-----");
@@ -93,6 +98,12 @@ public class Spider {
         System.out.println(link.text());
 
         var fileLink = "http://192.168.11.166" + link.attr("href");
+
+        System.out.println("==============");
+        System.out.println("ProjectName:");
+        while (projectName == null){
+            Thread.sleep(1000);
+        }
 
         URL url = new URL(fileLink);
         String filename = "D:\\git-dev\\" + projectName + "\\updatelist.txt";
