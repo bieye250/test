@@ -40,7 +40,6 @@ public class Spider {
         Thread.sleep(2000);
         System.out.println("-----输入peojectName-----");
         projectName = sc.next();
-        sc.close();
         Thread.sleep(3000);
 
         String filename = "D:\\git-dev\\" + projectName + "\\updatelist.txt";
@@ -61,6 +60,7 @@ public class Spider {
                 }
             }
         }
+        sc.close();
         Runtime.getRuntime().exit(0);
     }
 
